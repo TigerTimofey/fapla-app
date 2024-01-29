@@ -29,7 +29,7 @@ function LoginApp() {
           supabaseClient={supabase}
           appearance={{ theme: ThemeSupa }}
           theme="dark"
-          providers={["discord", "google"]}
+          providers={["google"]}
         />
       </header>
     </div>

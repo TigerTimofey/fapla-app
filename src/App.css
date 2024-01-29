@@ -14,7 +14,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #420a90b4;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -22,6 +22,7 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  padding: 10px;
 }
 
 .App-link {
@@ -35,4 +36,21 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.SignOut-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+.Info-user {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  text-align: left;
+}
+.Info-user h5,
+.Info-user h6 {
+  margin: 0;
+  padding: 0;
 }

@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { useNavigate } from "react-router-dom";
+import Paper from "@mui/material/Paper";
 
 const supabase = createClient(
   "https://ejptakqzjdjnyservufe.supabase.co",
@@ -16,7 +17,7 @@ function LoginApp() {
     supabase.auth.onAuthStateChange(async (event) => {
       console.log("event", event);
       supabase.auth.onAuthStateChange(async (event) => {
-        if (event == "SIGNED_IN") {
+        if (event === "SIGNED_IN") {
           navigate("/success");
         }
       });
@@ -25,12 +26,14 @@ function LoginApp() {
   return (
     <div className="App">
       <header className="App-header">
-        <Auth
-          supabaseClient={supabase}
-          appearance={{ theme: ThemeSupa }}
-          theme="dark"
-          providers={["google"]}
-        />
+        <Paper elevation={10} sx={{ padding: 10 }}>
+          <Auth
+            supabaseClient={supabase}
+            appearance={{ theme: ThemeSupa }}
+            theme="dark"
+            providers={["google"]}
+          />{" "}
+        </Paper>
       </header>
     </div>
   );

@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "LogoFont";
+  src: url("../public/fonts/Lilita_One/LilitaOne-Regular.ttf");
+}
+LogoFont {
+  font-family: LogoFont;
+}
+
 .App {
   text-align: center;
 }
@@ -14,7 +22,7 @@
 }
 
 .App-header {
-  background-color: #420a90b4;
+  background-color: #693ca9;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -22,7 +30,8 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-  padding: 10px;
+  padding: 20px;
+  font-family: LogoFont;
 }
 
 .App-link {
@@ -39,13 +48,13 @@
 }
 
 .SignOut-button {
-  position: absolute;
+  position: fixed;
   top: 20px;
   right: 20px;
 }
 .Info-user {
   position: absolute;
-  top: 20px;
+  top: 10px;
   left: 20px;
   text-align: left;
 }
@@ -53,4 +62,13 @@
 .Info-user h6 {
   margin: 0;
   padding: 0;
+}
+
+.Grid-column {
+  min-width: 300px;
+}
+.Fixed-add-plan {
+  position: absolute;
+  top: 100px;
+  text-align: center;
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import Swal from "sweetalert2";
@@ -11,50 +11,53 @@ const ButtonStyle = styled("div")(({ theme }) => ({
   },
 }));
 
-function AddNewLastname() {
-  const [showCreateFamilyModal, setShowCreateFamilyModal] = useState(false);
-
-  const handleClick = () => {
-    setShowCreateFamilyModal(true);
-
-    // Show alert here
-    (async () => {
-      const { value: formValues } = await Swal.fire({
+function AddNewLastname({
+  setFamilyLastname,
+  familyLastname,
+  idRemoveLastname,
+  setIdRemoveLastname,
+}) {
+  const handleCreateFamily = async () => {
+    try {
+      const { value: famname } = await Swal.fire({
         title: "Family Lastname",
-        html: `
-            <input id="swal-input1" class="swal2-input LogoFont">
-          `,
+        html: `<input id="swal-input1" class="swal2-input LogoFont">`,
         focusConfirm: false,
         preConfirm: () => {
-          return [document.getElementById("swal-input1").value];
+          return document.getElementById("swal-input1").value;
         },
       });
-      if (formValues) {
-        Swal.fire(JSON.stringify(formValues));
-      }
-    })();
 
-    async function getFamilyLastnames() {
-      try {
-        const response = await fetch("/api/lastname");
+      if (famname) {
+        const response = await fetch("http://localhost:4000/api/lastnames", {
+          method: "POST",
+          body: JSON.stringify({ famname }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
         if (!response.ok) {
           throw new Error("Failed to fetch");
         }
         const data = await response.json();
-        return data.lastnames;
-      } catch (error) {
-        console.error("Error fetching family lastnames:", error);
-        return null;
+        console.log("data", data);
+        setFamilyLastname(data.famname);
+        setIdRemoveLastname(data._id);
+        //find better way for auto show new state
+        // window.location.reload();
       }
+    } catch (error) {
+      console.error("Error handling lastname:", error);
+      Swal.fire("Error", "Failed to create lastname", "error");
     }
-    getFamilyLastnames();
   };
 
   return (
     <>
-      <ButtonStyle onClick={handleClick}>
-        <Paper elevation={8} sx={{ padding: 2 }}>
-          Place to Create
+      <ButtonStyle onClick={handleCreateFamily}>
+        <Paper elevation={8} sx={{ padding: 2, color: "#693ca9" }}>
+          <h2>Create new Family</h2>
         </Paper>
       </ButtonStyle>
     </>

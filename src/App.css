@@ -52,11 +52,17 @@ LogoFont {
   top: 20px;
   right: 20px;
 }
+.Family-name {
+  position: fixed;
+  top: 150px;
+}
+
 .Info-user {
-  position: absolute;
+  position: fixed;
   top: 10px;
   left: 20px;
-  text-align: left;
+  text-align: center;
+  /* padding: 1px; */
 }
 .Info-user h5,
 .Info-user h6 {

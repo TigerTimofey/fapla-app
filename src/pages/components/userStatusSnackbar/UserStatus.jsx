@@ -28,6 +28,7 @@ export default function UserStatus({
       <IconButton
         aria-label="fingerprint"
         color="secondary"
+        size="large"
         onClick={() => {
           setOpenSnackBar(true);
         }}
@@ -48,6 +49,8 @@ export default function UserStatus({
           sx={{ width: "100%", textAlign: "center" }}
         >
           {user?.role} user
+          <br /> <br />
+          {user?.email}
           <br />
           Created {formattedDate}
           <br />

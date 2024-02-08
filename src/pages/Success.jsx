@@ -11,7 +11,7 @@ import Paper from "@mui/material/Paper";
 import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
 
 import Swal from "sweetalert2";
-import AddFamilyMember from "./components/addFamily/AddMembers/AddFamilyMember";
+import AddFamilyMember from "./components/addFamily/addMembers/AddFamilyMember";
 
 const supabase = createClient(
   "https://ejptakqzjdjnyservufe.supabase.co",
@@ -33,9 +33,10 @@ function Success() {
   const [openSnackBar, setOpenSnackBar] = React.useState(false);
 
   const [familyLastname, setFamilyLastname] = React.useState({});
-  const [idRemoveLastname, setIdRemoveLastname] = React.useState("HUI");
+  const [idRemoveLastname, setIdRemoveLastname] = React.useState("");
 
-  const [familyMember, setFamilyMember] = React.useState(null);
+  const [familyMembers, setFamilyMembers] = React.useState([]);
+  // const [familyMember, setFamilyMember] = React.useState(null);
   const [tasks, setTasks] = React.useState({});
 
   const navigate = useNavigate();
@@ -165,9 +166,13 @@ function Success() {
                   </ButtonStyle>
                   {familyLastname[0]?.famname
                     ? familyLastname[0]?.famname
-                    : familyLastname}
-                  <AddFamilyMember />
+                    : familyLastname}{" "}
                 </h1>
+
+                <AddFamilyMember
+                  familyMembers={familyMembers}
+                  setFamilyMembers={setFamilyMembers}
+                />
               </>
             ) : (
               <AddNewLastname

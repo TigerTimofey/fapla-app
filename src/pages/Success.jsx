@@ -8,9 +8,17 @@ import SignOut from "./components/userStatusSnackbar/SignOut";
 import AddNewLastname from "./components/addFamily/AddNewLastname";
 
 import Paper from "@mui/material/Paper";
+import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+
 import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
 
 import Swal from "sweetalert2";
+
+import SpeedDial from "@mui/material/SpeedDial";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
+
 import AddFamilyMember from "./components/addFamily/addMembers/AddFamilyMember";
 
 const supabase = createClient(
@@ -60,61 +68,73 @@ function Success() {
     console.log("error", error);
     navigate("/");
   }
-  //fam name
-
-  //familyMember
-
-  React.useEffect(() => {
-    async function fetchFamilyLastname() {
-      const response = await fetch("/api/lastnames");
-      const data = await response.json();
-      console.log("familyLastname DATA", data);
-      if (response.ok) {
-        const modifiedData = data.map((item) => ({
-          id: item._id,
-          famname: item.famname,
-          __v: item.__v,
-        }));
-        setFamilyLastname(modifiedData);
-        if (modifiedData.length > 0) {
-          const id = modifiedData[0].id;
-          console.log("ID:", id);
-          setIdRemoveLastname(id);
-        }
+  //Lastname
+  const fetchFamilyLastname = async () => {
+    const response = await fetch("/api/lastnames");
+    const data = await response.json();
+    console.log("familyLastname DATA", data);
+    if (response.ok) {
+      const modifiedData = data.map((item) => ({
+        id: item._id,
+        famname: item.famname,
+        __v: item.__v,
+      }));
+      setFamilyLastname(modifiedData);
+      if (modifiedData.length > 0) {
+        const id = modifiedData[0].id;
+        console.log("ID:", id);
+        setIdRemoveLastname(id);
       }
     }
+  };
+  React.useEffect(() => {
     fetchFamilyLastname();
   }, []);
 
-  //familyMmember
-  // React.useEffect(() => {
-  //   async function getFamilyMember() {
-  //     const response = await fetch("/api/families");
-  //     const familyMember = await response.json();
+  //change Family
+  const handleChangeFamily = async (id) => {
+    try {
+      const { value: newFamname } = await Swal.fire({
+        title: "Enter New Name",
+        input: "text",
+        inputPlaceholder: "Enter new name",
+        showCancelButton: true,
+        inputValidator: (value) => {
+          if (!value) {
+            return "You need to enter a new name";
+          }
+        },
+      });
 
-  //     if (response.ok) {
-  //       setFamilyMember(familyMember);
-  //       console.log("familyMember", familyMember);
-  //     }
-  //   }
-  //   getFamilyMember();
-  // }, []);
+      if (newFamname) {
+        const response = await fetch(
+          `http://localhost:4000/api/lastnames/${idRemoveLastname}`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ famname: newFamname }),
+          }
+        );
 
-  //task
-  // React.useEffect(() => {
-  //   async function getTasks() {
-  //     const response = await fetch("/api/tasks");
-  //     const tasks = await response.json();
+        if (!response.ok) {
+          throw new Error("Failed to update");
+        }
 
-  //     if (response.ok) {
-  //       setTasks(tasks);
-  //       console.log("tasks", tasks);
-  //     }
-  //   }
-  //   getTasks();
-  //   console.log(tasks);
-  // }, []);
+        const updatedFamilyLastname = familyLastname.map((item) =>
+          item.id === id ? { ...item, famname: newFamname } : item
+        );
 
+        setFamilyLastname(updatedFamilyLastname);
+        Swal.fire("Success", "Family lastname updated successfully", "success");
+        fetchFamilyLastname();
+      }
+    } catch (error) {
+      console.error("Error handling update:", error);
+      Swal.fire("Error", "Failed to update family member", "error");
+    }
+  };
   //remove Family
   const handleDeleteFamily = async () => {
     try {
@@ -129,7 +149,6 @@ function Success() {
       );
 
       if (!response.ok) {
-        console.log("idRemoveLastname", typeof idRemoveLastname);
         throw new Error("Failed to delete");
       }
 
@@ -140,6 +159,9 @@ function Success() {
     }
   };
 
+  const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
+    marginLeft: theme.spacing(2),
+  }));
   return (
     <div className="App">
       <header className="App-header">
@@ -156,19 +178,47 @@ function Success() {
           <>
             {Object.keys(familyLastname).length > 0 ? (
               <>
-                <h1 className="Family-name">
-                  {" "}
-                  <ButtonStyle onClick={handleDeleteFamily}>
-                    <HighlightOffRoundedIcon
-                      color="warning"
-                      sx={{ fontSize: 40 }}
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginLeft: "100px",
+                  }}
+                >
+                  <h2>
+                    {familyLastname[0]?.famname
+                      ? familyLastname[0]?.famname
+                      : familyLastname}{" "}
+                  </h2>
+                  <StyledSpeedDial
+                    ariaLabel="SpeedDial playground example"
+                    hidden={false}
+                    icon={<SpeedDialIcon />}
+                    direction="right"
+                    FabProps={{
+                      sx: {
+                        bgcolor: "secondary.main",
+                        "&:hover": {
+                          bgcolor: "error.main",
+                        },
+                        width: "34px",
+                        height: "24px",
+                      },
+                    }}
+                  >
+                    <SpeedDialAction
+                      icon={<ChangeCircleIcon />}
+                      tooltipTitle="Change Name"
+                      onClick={handleChangeFamily}
                     />
-                  </ButtonStyle>
-                  {familyLastname[0]?.famname
-                    ? familyLastname[0]?.famname
-                    : familyLastname}{" "}
-                </h1>
-
+                    <SpeedDialAction
+                      icon={<DeleteForeverIcon />}
+                      tooltipTitle="Remove Member"
+                      onClick={handleDeleteFamily}
+                    />
+                  </StyledSpeedDial>
+                </div>
                 <AddFamilyMember
                   familyMembers={familyMembers}
                   setFamilyMembers={setFamilyMembers}

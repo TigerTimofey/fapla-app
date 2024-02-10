@@ -1,7 +1,7 @@
 import * as React from "react";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
-import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
 import Fingerprint from "@mui/icons-material/Fingerprint";
 
 export default function UserStatus({
@@ -25,8 +25,7 @@ export default function UserStatus({
 
   return (
     <div>
-      <IconButton
-        aria-label="fingerprint"
+      <Button
         color="secondary"
         size="large"
         onClick={() => {
@@ -34,7 +33,7 @@ export default function UserStatus({
         }}
       >
         <Fingerprint />
-      </IconButton>
+      </Button>
 
       <Snackbar
         open={openSnackBar}

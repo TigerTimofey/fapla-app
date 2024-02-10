@@ -8,7 +8,7 @@ import Box from "@mui/material/Box";
 const ButtonStyle = styled("div")(({ theme }) => ({
   cursor: "pointer",
   maxWidth: "50%",
-  marginLeft: "65px",
+  marginLeft: "25%",
   transition: "transform 0.3s ease-in-out",
   "&:hover": {
     transform: "scale(1.05)",

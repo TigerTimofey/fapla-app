@@ -44,8 +44,6 @@ function AddNewLastname({
         console.log("data", data);
         setFamilyLastname(data.famname);
         setIdRemoveLastname(data._id);
-        //find better way for auto show new state
-        // window.location.reload();
       }
     } catch (error) {
       console.error("Error handling lastname:", error);

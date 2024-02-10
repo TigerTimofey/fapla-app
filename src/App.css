@@ -64,10 +64,10 @@ LogoFont {
   top: 20px;
   right: 20px;
 }
-.Family-name {
+/* .Family-name {
   position: fixed;
-  top: 150px;
-}
+  top: 0px;
+} */
 
 .Info-user {
   position: fixed;

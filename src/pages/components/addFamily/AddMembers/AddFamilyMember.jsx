@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import Swal from "sweetalert2";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+
+import Badge from "@mui/material/Badge";
+
 import AddTask from "./addTasks/AddTask";
+import ChangeRemoveMember from "./ChangeRemoveMember";
+
+import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
+import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 
 const ButtonStyle = styled("div")(({ theme }) => ({
   cursor: "pointer",
@@ -18,7 +25,10 @@ const Item = styled(Paper)(({ theme }) => ({
   color: "#693ca9",
 }));
 
-function AddFamilyMember({ familyMembers, setFamilyMembers }) {
+function AddFamilyMember({}) {
+  const [familyMembers, setFamilyMembers] = useState([]);
+  const [idRemoveLastname, setIdRemoveLastname] = useState(null);
+
   const handleCreateMember = async (name, role) => {
     try {
       const response = await fetch("http://localhost:4000/api/families", {
@@ -40,6 +50,32 @@ function AddFamilyMember({ familyMembers, setFamilyMembers }) {
       Swal.fire("Error", "Failed to create member", "error");
     }
   };
+
+  const fetchFamilyLastname = async () => {
+    try {
+      const response = await fetch("/api/families");
+      if (!response.ok) {
+        throw new Error("Failed to fetch");
+      }
+      const data = await response.json();
+      const membersData = data.map((item) => ({
+        id: item._id,
+        name: item.name,
+        role: item.role,
+        __v: item.__v,
+      }));
+      setFamilyMembers(membersData);
+      if (membersData.length > 0) {
+        const id = membersData[0].id;
+        setIdRemoveLastname(id);
+      }
+    } catch (error) {
+      console.error("Error fetching family members:", error);
+    }
+  };
+  useEffect(() => {
+    fetchFamilyLastname();
+  }, []);
 
   const handleAddFamilyMember = async () => {
     try {
@@ -75,7 +111,12 @@ function AddFamilyMember({ familyMembers, setFamilyMembers }) {
 
         if (name) {
           await handleCreateMember(name, role);
-          setFamilyMembers([...familyMembers, { name, role }]);
+          Swal.fire(
+            "Success",
+            `New family member ${name} added successfully as ${role}`,
+            "success"
+          );
+          fetchFamilyLastname();
         }
       }
     } catch (error) {
@@ -83,28 +124,79 @@ function AddFamilyMember({ familyMembers, setFamilyMembers }) {
       Swal.fire("Error", "Failed to create family member", "error");
     }
   };
-  React.useEffect(() => {
-    async function fetchFamilyLastname() {
-      const response = await fetch("/api/families");
-      const data = await response.json();
-      console.log("members DATA", data);
-      if (response.ok) {
-        const membersData = data.map((item) => ({
-          id: item._id,
-          name: item.name,
-          role: item.role,
-          __v: item.__v,
-        }));
-        setFamilyMembers(membersData);
-        if (membersData.length > 0) {
-          const id = membersData[0].id;
-          console.log("ID members:", id);
-          // setIdRemoveLastname(id);
-        }
-      }
-    }
-    fetchFamilyLastname();
-  }, []);
+
+  // const handleRemoveMember = async (id) => {
+  //   try {
+  //     const response = await fetch(`http://localhost:4000/api/families/${id}`, {
+  //       method: "DELETE",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error("Failed to delete");
+  //     }
+  //     // Remove the member from the state
+  //     setFamilyMembers(familyMembers.filter((member) => member.id !== id));
+  //     Swal.fire("Success", "Family member removed successfully", "success");
+  //   } catch (error) {
+  //     console.error("Error handling deletion:", error);
+  //     Swal.fire("Error", "Failed to delete family member", "error");
+  //   }
+  // };
+
+  // const handleChangeMember = async (id) => {
+  //   try {
+  //     const { value: newName } = await Swal.fire({
+  //       title: "Enter New Name",
+  //       input: "text",
+  //       inputPlaceholder: "Enter new name",
+  //       showCancelButton: true,
+  //       inputValidator: (value) => {
+  //         if (!value) {
+  //           return "You need to enter a new name";
+  //         }
+  //       },
+  //     });
+
+  //     if (newName) {
+  //       const response = await fetch(
+  //         `http://localhost:4000/api/families/${id}`,
+  //         {
+  //           method: "PATCH",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           body: JSON.stringify({ name: newName }),
+  //         }
+  //       );
+
+  //       if (!response.ok) {
+  //         throw new Error("Failed to update");
+  //       }
+
+  //       setFamilyMembers(
+  //         familyMembers.map((member) => {
+  //           if (member.id === id) {
+  //             return { ...member, name: newName };
+  //           }
+  //           return member;
+  //         })
+  //       );
+
+  //       Swal.fire(
+  //         "Success",
+  //         "Family member name updated successfully",
+  //         "success"
+  //       );
+  //     }
+  //   } catch (error) {
+  //     console.error("Error handling update:", error);
+  //     Swal.fire("Error", "Failed to update family member", "error");
+  //   }
+  // };
+
   return (
     <>
       <ButtonStyle onClick={handleAddFamilyMember}>
@@ -113,12 +205,48 @@ function AddFamilyMember({ familyMembers, setFamilyMembers }) {
         </Paper>
       </ButtonStyle>
       <Box sx={{ width: "100%" }}>
-        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+        <Grid container rowSpacing={4} columnSpacing={{ xs: 3, sm: 4, md: 5 }}>
           {familyMembers.map((member) => (
-            <Grid item xs={4}>
-              <Item key={member.name}>
-                {member.name}
-                <br />
+            <Grid
+              item
+              xs={12}
+              md={4}
+              sx={{ marginTop: "10px" }}
+              key={member.id}
+            >
+              {" "}
+              <ChangeRemoveMember
+                familyMembers={familyMembers}
+                setFamilyMembers={setFamilyMembers}
+                // handleChangeMember={handleChangeMember}
+                // handleRemoveMember={handleRemoveMember}
+              />{" "}
+              <Item>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    // paddingTop: "10px",
+                  }}
+                >
+                  {" "}
+                  <h6 style={{ marginRight: "10px" }}>{member.role}</h6>
+                  <h2>{member.name}</h2>
+                  {/* <ButtonStyle
+                    sx={{ marginLeft: "5px" }}
+                    onClick={() => handleChangeMember(member.id)}
+                  >
+                    <ChangeCircleIcon color="warning" sx={{ fontSize: 25 }} />
+                  </ButtonStyle>
+                  <ButtonStyle onClick={() => handleRemoveMember(member.id)}>
+                    <HighlightOffRoundedIcon
+                      color="error"
+                      sx={{ fontSize: 25 }}
+                    />
+                  </ButtonStyle> */}
+                </div>
+
                 <AddTask />
               </Item>
             </Grid>

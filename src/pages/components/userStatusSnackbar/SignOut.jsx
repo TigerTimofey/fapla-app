@@ -3,11 +3,14 @@ import LogoutIcon from "@mui/icons-material/Logout";
 
 function SignOut({ signOutUser }) {
   return (
-    <div className="SignOut-button">
-      <Button variant="contained" color="error" onClick={() => signOutUser()}>
-        <LogoutIcon />
-      </Button>
-    </div>
+    <Button
+      sx={{ marginLeft: "10px" }}
+      variant="contained"
+      color="error"
+      onClick={() => signOutUser()}
+    >
+      <LogoutIcon />
+    </Button>
   );
 }
 export default SignOut;

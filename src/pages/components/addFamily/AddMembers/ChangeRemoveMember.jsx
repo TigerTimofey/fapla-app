@@ -20,8 +20,12 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 export default function ChangeRemoveMember({
   familyMembers,
   setFamilyMembers,
+  // handleChangeMember,
+  // handleRemoveMember,
+  memberID,
 }) {
   const handleChangeMember = async (id) => {
+    console.log("memeber id in addFa ", id);
     try {
       const { value: newName } = await Swal.fire({
         title: "Enter New Name",
@@ -51,19 +55,10 @@ export default function ChangeRemoveMember({
           throw new Error("Failed to update");
         }
 
-        setFamilyMembers(
-          familyMembers.map((member) => {
-            if (member.id === id) {
-              return { ...member, name: newName };
-            }
-            return member;
-          })
-        );
-
-        Swal.fire(
-          "Success",
-          "Family member name updated successfully",
-          "success"
+        setFamilyMembers((prevMembers) =>
+          prevMembers.map((member) =>
+            member.id === id ? { ...member, name: newName } : member
+          )
         );
       }
     } catch (error) {
@@ -71,7 +66,9 @@ export default function ChangeRemoveMember({
       Swal.fire("Error", "Failed to update family member", "error");
     }
   };
+
   const handleRemoveMember = async (id) => {
+    console.log("id remove", id);
     try {
       const response = await fetch(`http://localhost:4000/api/families/${id}`, {
         method: "DELETE",
@@ -83,9 +80,11 @@ export default function ChangeRemoveMember({
       if (!response.ok) {
         throw new Error("Failed to delete");
       }
+
       // Remove the member from the state
-      setFamilyMembers(familyMembers.filter((member) => member.id !== id));
-      Swal.fire("Success", "Family member removed successfully", "success");
+      setFamilyMembers((prevMembers) =>
+        prevMembers.filter((member) => member.id !== id)
+      );
     } catch (error) {
       console.error("Error handling deletion:", error);
       Swal.fire("Error", "Failed to delete family member", "error");
@@ -94,49 +93,49 @@ export default function ChangeRemoveMember({
   return (
     <Box sx={{ transform: "translateZ(0px)", flexGrow: 1 }}>
       <Box sx={{ position: "relative", height: 0 }}>
-        {familyMembers &&
-          familyMembers.map((member) => (
-            <StyledSpeedDial
-              key={member.id}
-              ariaLabel="SpeedDial playground example"
-              hidden={false}
-              icon={<SpeedDialIcon />}
-              direction="left"
-              size="small"
-              FabProps={{
-                sx: {
-                  bgcolor: "secondary.main",
-                  "&:hover": {
-                    bgcolor: "error.main",
-                  },
-                  width: "34px",
-                  height: "24px",
-                },
-              }}
-            >
-              <SpeedDialAction
-                icon={<PlaylistAddCircleIcon />}
-                tooltipTitle="Add Task"
-                onClick={() => {
-                  // Handle Add Task action
-                }}
-              />
-              <SpeedDialAction
-                icon={<ChangeCircleIcon />}
-                tooltipTitle="Change Name"
-                onClick={() => {
-                  handleChangeMember(member.id);
-                }}
-              />
-              <SpeedDialAction
-                icon={<DeleteForeverIcon />}
-                tooltipTitle="Remove Member"
-                onClick={() => {
-                  handleRemoveMember(member.id);
-                }}
-              />
-            </StyledSpeedDial>
-          ))}
+        {/* {familyMembers &&
+          familyMembers.map((member) => ( */}
+        <StyledSpeedDial
+          // key={member.id}
+          ariaLabel="SpeedDial playground example"
+          hidden={false}
+          icon={<SpeedDialIcon />}
+          direction="left"
+          size="small"
+          FabProps={{
+            sx: {
+              bgcolor: "secondary.main",
+              "&:hover": {
+                bgcolor: "error.main",
+              },
+              width: "34px",
+              height: "24px",
+            },
+          }}
+        >
+          <SpeedDialAction
+            icon={<DeleteForeverIcon />}
+            tooltipTitle="Remove Member"
+            onClick={() => {
+              handleRemoveMember(memberID);
+            }}
+          />
+          <SpeedDialAction
+            icon={<ChangeCircleIcon />}
+            tooltipTitle="Change Name"
+            onClick={() => {
+              handleChangeMember(memberID);
+            }}
+          />
+          <SpeedDialAction
+            icon={<PlaylistAddCircleIcon />}
+            tooltipTitle="Add Task"
+            onClick={() => {
+              // Handle Add Task action
+            }}
+          />
+        </StyledSpeedDial>
+        {/* ))} */}
       </Box>
     </Box>
   );

@@ -1,3 +1,6 @@
+body {
+  background-color: #693ca9;
+}
 @font-face {
   font-family: "LogoFont";
   src: url("../public/fonts/Lilita_One/LilitaOne-Regular.ttf");
@@ -60,14 +63,16 @@ LogoFont {
 }
 
 .SignOut-button {
+  display: flex;
   position: fixed;
-  top: 20px;
+  top: 10px;
   right: 20px;
 }
-/* .Family-name {
+.Family-name {
   position: fixed;
   top: 0px;
-} */
+  left: 15px;
+}
 
 .Info-user {
   position: fixed;

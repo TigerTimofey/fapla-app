@@ -39,7 +39,11 @@ export default function UserStatus({
         open={openSnackBar}
         autoHideDuration={2500}
         onClose={handleClose}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "center",
+          marginLeft: "10px",
+        }}
       >
         <Alert
           onClose={handleClose}

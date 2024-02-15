@@ -1,30 +1,33 @@
 import React from "react";
 import { createClient } from "@supabase/supabase-js";
 import { useNavigate } from "react-router-dom";
-
 import { styled } from "@mui/material/styles";
-import UserStatus from "./components/userStatusSnackbar/UserStatus";
-import SignOut from "./components/userStatusSnackbar/SignOut";
-import AddNewLastname from "./components/addFamily/AddNewLastname";
 
 import Paper from "@mui/material/Paper";
-import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-
-import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
-
-import Swal from "sweetalert2";
-
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
+import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
+import UserStatus from "./components/userStatusSnackbar/UserStatus";
+import SignOut from "./components/userStatusSnackbar/SignOut";
+import AddNewLastname from "./components/addFamily/AddNewLastname";
 import AddFamilyMember from "./components/addFamily/addMembers/AddFamilyMember";
+
+import Swal from "sweetalert2";
 
 const supabase = createClient(
   "https://ejptakqzjdjnyservufe.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqcHRha3F6amRqbnlzZXJ2dWZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDY0Njk5MDksImV4cCI6MjAyMjA0NTkwOX0.8THRHyVvP1aDBqa_l5et6cHoPz9VTRK5ZtN1uu7fhds"
 );
+
+const StyledHeader = styled("header")(({ theme }) => ({
+  position: "fixed",
+  width: "100%",
+  backgroundColor: "#693ca9",
+  zIndex: 1000,
+}));
 
 const ButtonStyle = styled("div")(({ theme }) => ({
   cursor: "pointer",
@@ -34,17 +37,17 @@ const ButtonStyle = styled("div")(({ theme }) => ({
   },
 }));
 
+const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
+  marginLeft: theme.spacing(2),
+}));
+
 function Success() {
   const [user, setUser] = React.useState({});
   const [isUserAdmin, setIsUserAdmin] = React.useState(false);
-
   const [openSnackBar, setOpenSnackBar] = React.useState(false);
-
   const [familyLastname, setFamilyLastname] = React.useState({});
   const [idRemoveLastname, setIdRemoveLastname] = React.useState("");
-
   const [familyMembers, setFamilyMembers] = React.useState([]);
-  // const [familyMember, setFamilyMember] = React.useState(null);
   const [tasks, setTasks] = React.useState({});
 
   const navigate = useNavigate();
@@ -72,7 +75,6 @@ function Success() {
   const fetchFamilyLastname = async () => {
     const response = await fetch("/api/lastnames");
     const data = await response.json();
-    console.log("familyLastname DATA", data);
     if (response.ok) {
       const modifiedData = data.map((item) => ({
         id: item._id,
@@ -90,7 +92,6 @@ function Success() {
   React.useEffect(() => {
     fetchFamilyLastname();
   }, []);
-
   //change Family
   const handleChangeFamily = async (id) => {
     try {
@@ -127,7 +128,6 @@ function Success() {
         );
 
         setFamilyLastname(updatedFamilyLastname);
-        Swal.fire("Success", "Family lastname updated successfully", "success");
         fetchFamilyLastname();
       }
     } catch (error) {
@@ -135,7 +135,7 @@ function Success() {
       Swal.fire("Error", "Failed to update family member", "error");
     }
   };
-  //remove Family
+
   const handleDeleteFamily = async () => {
     try {
       const response = await fetch(
@@ -159,38 +159,24 @@ function Success() {
     }
   };
 
-  const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
-    marginLeft: theme.spacing(2),
-  }));
   return (
     <div className="App">
       <header className="App-header">
-        <Paper elevation={8} className="Info-user">
-          <UserStatus
-            user={user}
-            openSnackBar={openSnackBar}
-            setOpenSnackBar={setOpenSnackBar}
-            isUserAdmin={isUserAdmin}
-          />
-        </Paper>
-
         {Object.keys(user).length >= 0 ? (
           <>
             {Object.keys(familyLastname).length > 0 ? (
               <>
-                <div
+                <StyledHeader
                   style={{
                     display: "flex",
-                    justifyContent: "center",
+                    justifyContent: "flex-start",
                     alignItems: "center",
-                    marginLeft: "100px",
                   }}
+                  className="Family-name"
                 >
-                  <h2>
-                    {familyLastname[0]?.famname
-                      ? familyLastname[0]?.famname
-                      : familyLastname}{" "}
-                  </h2>
+                  {familyLastname[0]?.famname
+                    ? familyLastname[0]?.famname
+                    : familyLastname}{" "}
                   <StyledSpeedDial
                     ariaLabel="SpeedDial playground example"
                     hidden={false}
@@ -218,22 +204,37 @@ function Success() {
                       onClick={handleDeleteFamily}
                     />
                   </StyledSpeedDial>
-                </div>
+                  <div className="SignOut-button">
+                    <Paper elevation={8}>
+                      <UserStatus
+                        user={user}
+                        openSnackBar={openSnackBar}
+                        setOpenSnackBar={setOpenSnackBar}
+                        isUserAdmin={isUserAdmin}
+                      />
+                    </Paper>
+                    <SignOut signOutUser={signOutUser} />
+                  </div>{" "}
+                </StyledHeader>
+
                 <AddFamilyMember
                   familyMembers={familyMembers}
                   setFamilyMembers={setFamilyMembers}
                 />
               </>
             ) : (
-              <AddNewLastname
-                familyLastname={familyLastname}
-                setFamilyLastname={setFamilyLastname}
-                idRemoveLastname={idRemoveLastname}
-                setIdRemoveLastname={setIdRemoveLastname}
-              />
+              <>
+                <AddNewLastname
+                  familyLastname={familyLastname}
+                  setFamilyLastname={setFamilyLastname}
+                  idRemoveLastname={idRemoveLastname}
+                  setIdRemoveLastname={setIdRemoveLastname}
+                />
+                <div className="SignOut-button">
+                  <SignOut signOutUser={signOutUser} />
+                </div>
+              </>
             )}
-
-            <SignOut signOutUser={signOutUser} />
           </>
         ) : (
           <>

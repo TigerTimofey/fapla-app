@@ -84,7 +84,6 @@ function Success() {
       setFamilyLastname(modifiedData);
       if (modifiedData.length > 0) {
         const id = modifiedData[0].id;
-        console.log("ID:", id);
         setIdRemoveLastname(id);
       }
     }
@@ -193,15 +192,16 @@ function Success() {
                       },
                     }}
                   >
-                    <SpeedDialAction
-                      icon={<ChangeCircleIcon />}
-                      tooltipTitle="Change Name"
-                      onClick={handleChangeFamily}
-                    />
+                    {" "}
                     <SpeedDialAction
                       icon={<DeleteForeverIcon />}
                       tooltipTitle="Remove Member"
                       onClick={handleDeleteFamily}
+                    />
+                    <SpeedDialAction
+                      icon={<ChangeCircleIcon />}
+                      tooltipTitle="Change Name"
+                      onClick={handleChangeFamily}
                     />
                   </StyledSpeedDial>
                   <div className="SignOut-button">

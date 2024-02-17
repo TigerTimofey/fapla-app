@@ -13,16 +13,17 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
-  top: theme.spacing(-3.3),
+  top: theme.spacing(-4.3),
   right: theme.spacing(-2),
 }));
 
 export default function ChangeRemoveMember({
   familyMembers,
   setFamilyMembers,
+  handleAddTask,
   // handleChangeMember,
   // handleRemoveMember,
-  memberID,
+  memberId,
 }) {
   const handleChangeMember = async (id) => {
     console.log("memeber id in addFa ", id);
@@ -116,22 +117,57 @@ export default function ChangeRemoveMember({
           <SpeedDialAction
             icon={<DeleteForeverIcon />}
             tooltipTitle="Remove Member"
+            FabProps={{
+              sx: {
+                bgcolor: "secondary.main",
+                color: "white",
+                "&:hover": {
+                  bgcolor: "error.main",
+                },
+                width: "34px",
+                height: "24px",
+              },
+            }}
             onClick={() => {
-              handleRemoveMember(memberID);
+              handleRemoveMember(memberId);
             }}
           />
           <SpeedDialAction
-            icon={<ChangeCircleIcon />}
+            icon={<ChangeCircleIcon color="white" />}
             tooltipTitle="Change Name"
+            FabProps={{
+              sx: {
+                bgcolor: "secondary.main",
+                color: "white",
+                "&:hover": {
+                  bgcolor: "warning.main",
+                },
+
+                width: "34px",
+                height: "24px",
+              },
+            }}
             onClick={() => {
-              handleChangeMember(memberID);
+              handleChangeMember(memberId);
             }}
           />
           <SpeedDialAction
             icon={<PlaylistAddCircleIcon />}
             tooltipTitle="Add Task"
+            FabProps={{
+              sx: {
+                bgcolor: "secondary.main",
+                color: "white",
+                "&:hover": {
+                  bgcolor: "success.main",
+                },
+                width: "34px",
+                height: "24px",
+              },
+            }}
             onClick={() => {
               // Handle Add Task action
+              handleAddTask();
             }}
           />
         </StyledSpeedDial>

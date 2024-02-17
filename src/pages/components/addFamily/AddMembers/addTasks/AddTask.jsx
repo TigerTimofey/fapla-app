@@ -4,21 +4,47 @@ import { styled } from "@mui/material/styles";
 import Swal from "sweetalert2";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import ChangeRemoveMember from "../ChangeRemoveMember";
 
 const ButtonStyle = styled("div")(({ theme }) => ({
   cursor: "pointer",
-  maxWidth: "50%",
-  marginLeft: "25%",
+  maxWidth: "20%",
+  marginLeft: "40%",
+
+  padding: "2px",
+  fontSize: "1.2rem",
   transition: "transform 0.3s ease-in-out",
   "&:hover": {
     transform: "scale(1.05)",
   },
+  minWidth: "50px",
   backgroundColor: "#693ca9",
   color: "white",
   borderRadius: "5px",
 }));
 
-function AddTask({ memberId }) {
+const ButtonAddTask = styled("div")(({ theme }) => ({
+  cursor: "pointer",
+  maxWidth: "20%",
+  marginLeft: "40%",
+  padding: "2px",
+  fontSize: "1.2rem",
+  transition: "transform 0.3s ease-in-out",
+  "&:hover": {
+    transform: "scale(1.05)",
+  },
+  backgroundColor: "#1f882c",
+  color: "white",
+  borderRadius: "5px",
+}));
+
+function AddTask({
+  memberId,
+  pointStart,
+  setPoints,
+  familyMembers,
+  setFamilyMembers,
+}) {
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
@@ -57,7 +83,7 @@ function AddTask({ memberId }) {
         showCancelButton: true,
         inputValidator: (value) => {
           if (!value) {
-            return "You need to choose a title";
+            return "You need to choose a points";
           }
         },
       });
@@ -98,7 +124,6 @@ function AddTask({ memberId }) {
             ...tasks,
             { memberId: memberId, points: points, title: title, done: false },
           ]);
-          Swal.fire("Success", "Task added successfully", "success");
         }
       }
     } catch (error) {
@@ -107,7 +132,7 @@ function AddTask({ memberId }) {
     }
   };
 
-  const handleTaskDone = async (index, taskId) => {
+  const handleTaskDone = async (index, taskId, points) => {
     try {
       // Remove the task from the database
       await fetch(`http://localhost:4000/api/tasks/${taskId}`, {
@@ -117,6 +142,7 @@ function AddTask({ memberId }) {
       // Remove the task from the local state
       const updatedTasks = tasks.filter((task, i) => i !== index);
       setTasks(updatedTasks);
+      setPoints(pointStart + Number(points));
     } catch (error) {
       console.error("Error marking task as done:", error);
       Swal.fire("Error", "Failed to mark task as done", "error");
@@ -125,24 +151,52 @@ function AddTask({ memberId }) {
 
   return (
     <>
-      {/* Add task button */}
-      <ButtonStyle onClick={handleAddTask}>
-        <h6>Add task</h6>
-      </ButtonStyle>
-      {/* Displaying tasks */}
+      {" "}
+      <ChangeRemoveMember
+        handleAddTask={handleAddTask}
+        familyMembers={familyMembers}
+        setFamilyMembers={setFamilyMembers}
+        memberId={memberId}
+      />{" "}
       <Box sx={{ width: "100%" }}>
+        {/* <ButtonAddTask onClick={() => handleAddTask()}>Add</ButtonAddTask> */}
+        {/* Displaying tasks */}
         {tasks.map((task, index) => (
-          <Paper key={index} elevation={3}>
-            <p>
-              {index + 1}. {task.title}
-            </p>
-            <p>Points: {task.points}</p>
-            <p>done: {task.done ? "Yes" : "No"}</p>
-            {/* Button to mark task as done */}
-            <button onClick={() => handleTaskDone(index, task._id)}>
-              Mark as Done
-            </button>
-          </Paper>
+          <Grid
+            container
+            rowSpacing={1}
+            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+            key={index}
+          >
+            <Grid item xs={12}>
+              <hr />
+              <h5
+                style={{
+                  wordWrap: "break-word",
+                  marginBottom: "-20px",
+                  padding: "5px",
+                }}
+              >
+                {index + 1}. {task.title}
+              </h5>
+            </Grid>
+            {/* <Grid
+              container
+              rowSpacing={1}
+              columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+            > */}
+            <Grid item xs={6}>
+              <h6>{task.points} ★</h6>
+            </Grid>
+            <Grid item xs={6} sx={{ marginTop: "50px" }}>
+              <ButtonStyle
+                onClick={() => handleTaskDone(index, task._id, task.points)}
+              >
+                Done
+              </ButtonStyle>
+            </Grid>
+          </Grid>
+          // </Grid>
         ))}
       </Box>
     </>

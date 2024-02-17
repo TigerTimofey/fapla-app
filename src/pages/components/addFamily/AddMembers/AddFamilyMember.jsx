@@ -20,11 +20,13 @@ const ButtonStyle = styled("div")(({ theme }) => ({
 
 const Item = styled(Paper)(({ theme }) => ({
   color: "#693ca9",
+  padding: "2px",
 }));
 
 function AddFamilyMember({}) {
   const [familyMembers, setFamilyMembers] = React.useState([]);
   const [idRemoveLastname, setIdRemoveLastname] = React.useState(null);
+  const [points, setPoints] = React.useState(0);
 
   const handleCreateMember = async (name, role) => {
     try {
@@ -134,12 +136,12 @@ function AddFamilyMember({}) {
               sx={{ marginTop: "10px" }}
               key={member.id}
             >
-              {" "}
+              {/* {" "}
               <ChangeRemoveMember
                 familyMembers={familyMembers}
                 setFamilyMembers={setFamilyMembers}
-                memberID={member.id}
-              />{" "}
+                memberId={member.id}
+              />{" "} */}
               <Item>
                 <div
                   style={{
@@ -148,12 +150,22 @@ function AddFamilyMember({}) {
                     alignItems: "center",
                   }}
                 >
-                  {" "}
                   <h6 style={{ marginRight: "10px" }}>{member.role}</h6>
                   <h2>{member.name}</h2>
+
+                  <h6 style={{ marginLeft: "10px", color: "#D4AF37" }}>
+                    {" "}
+                    {points} ★
+                  </h6>
                 </div>
 
-                <AddTask memberId={member.id} />
+                <AddTask
+                  memberId={member.id}
+                  pointStart={points}
+                  setPoints={setPoints}
+                  familyMembers={familyMembers}
+                  setFamilyMembers={setFamilyMembers}
+                />
               </Item>
             </Grid>
           ))}

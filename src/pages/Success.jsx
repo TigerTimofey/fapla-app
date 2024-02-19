@@ -13,7 +13,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import UserStatus from "./components/userStatusSnackbar/UserStatus";
 import SignOut from "./components/userStatusSnackbar/SignOut";
 import AddNewLastname from "./components/addFamily/AddNewLastname";
-import AddFamilyMember from "./components/addFamily/AddMembers/AddFamilyMember";
+import AddFamilyMember from "./components/addFamily/addMembers/AddFamilyMember";
 
 import Swal from "sweetalert2";
 
@@ -173,7 +173,7 @@ function Success() {
                 >
                   {familyLastname[0]?.famname
                     ? familyLastname[0]?.famname
-                    : familyLastname}{" "}
+                    : familyLastname}
                   <StyledSpeedDial
                     ariaLabel="SpeedDial playground example"
                     hidden={false}

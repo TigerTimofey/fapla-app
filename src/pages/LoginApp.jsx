@@ -10,7 +10,7 @@ const supaWebKey = process.env.REACT_APP_SUPA_WEB_KEY;
 
 const supabase = createClient(supaWeb, supaWebKey);
 
-function LoginApp() {
+export default function LoginApp() {
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -42,4 +42,4 @@ function LoginApp() {
   );
 }
 
-export default LoginApp;
+// export default LoginApp;

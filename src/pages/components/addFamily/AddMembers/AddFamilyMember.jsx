@@ -9,6 +9,8 @@ import { styled } from "@mui/material/styles";
 import Swal from "sweetalert2";
 import AddTask from "./addTasks/AddTask";
 
+import "animate.css";
+
 const ButtonStyle = styled("div")(({ theme }) => ({
   cursor: "pointer",
   transition: "transform 0.2s ease-in-out",
@@ -145,6 +147,7 @@ function AddFamilyMember() {
                     justifyContent: "center",
                     alignItems: "center",
                   }}
+                  className={`animate__animated animate__flipInX `}
                 >
                   <h6 style={{ marginRight: "10px" }}>{member.role}</h6>
                   <h2>{member.name}</h2>

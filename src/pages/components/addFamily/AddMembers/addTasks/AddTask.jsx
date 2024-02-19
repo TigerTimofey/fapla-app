@@ -7,6 +7,8 @@ import { styled } from "@mui/material/styles";
 
 import Swal from "sweetalert2";
 
+import "animate.css";
+
 import ChangeRemoveMember from "../ChangeRemoveMember";
 
 const ButtonStyle = styled("div")(({ theme }) => ({
@@ -41,6 +43,7 @@ function AddTask({
   setFamilyMembers,
 }) {
   const [tasks, setTasks] = React.useState([]);
+  const [animationTask, setAnimationTask] = React.useState("animate__flipInX");
 
   React.useEffect(() => {
     fetchTasks();
@@ -163,11 +166,14 @@ function AddTask({
         },
         body: JSON.stringify({ stars: updatedStars }),
       });
-
-      const updatedTasks = tasks.filter((task, i) => i !== index);
-      setTasks(updatedTasks);
-      setPoints(updatedStars);
-      fetchFamilyLastname();
+      setAnimationTask("animate__flipOutX");
+      setTimeout(() => {
+        const updatedTasks = tasks.filter((task, i) => i !== index);
+        setTasks(updatedTasks);
+        setPoints(updatedStars);
+        fetchFamilyLastname();
+        setAnimationTask("animate__flipInX");
+      }, 700);
     } catch (error) {
       console.error("Error marking task as done:", error);
       Swal.fire("Error", "Failed to mark task as done", "error");
@@ -176,16 +182,18 @@ function AddTask({
 
   return (
     <>
-      {" "}
       <ChangeRemoveMember
         handleAddTask={handleAddTask}
         familyMembers={familyMembers}
         setFamilyMembers={setFamilyMembers}
         memberId={memberId}
-      />{" "}
+      />
       <Box sx={{ width: "100%" }}>
         {tasks.map((task, index) => (
-          <Item key={index}>
+          <Item
+            key={index}
+            className={`animate__animated ${animationTask}  animate__delay-0.5s`}
+          >
             <Grid
               container
               rowSpacing={1}

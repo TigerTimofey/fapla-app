@@ -5,6 +5,8 @@ import { styled } from "@mui/material/styles";
 
 import Swal from "sweetalert2";
 
+import "animate.css";
+
 const ButtonStyle = styled("div")(({ theme }) => ({
   cursor: "pointer",
   transition: "transform 0.2s ease-in-out",

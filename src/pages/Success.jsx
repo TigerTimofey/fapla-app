@@ -13,7 +13,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import UserStatus from "./components/userStatusSnackbar/UserStatus";
 import SignOut from "./components/userStatusSnackbar/SignOut";
 import AddNewLastname from "./components/addFamily/AddNewLastname";
-import AddFamilyMember from "./components/addFamily/addMembers/AddFamilyMember";
+import AddFamilyMember from "./components/addFamily/AddMembers/AddFamilyMember";
 
 import Swal from "sweetalert2";
 

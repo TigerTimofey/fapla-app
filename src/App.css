@@ -95,3 +95,26 @@ LogoFont {
   top: 100px;
   text-align: center;
 }
+
+.BackSpecial {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("./bg3.jpg");
+  background-size: cover;
+  animation: slideBackground 50s linear infinite;
+}
+
+@keyframes slideBackground {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}

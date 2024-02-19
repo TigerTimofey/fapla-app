@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+
 import Paper from "@mui/material/Paper";
-import { styled } from "@mui/material/styles";
-import Swal from "sweetalert2";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import { styled } from "@mui/material/styles";
+
+import Swal from "sweetalert2";
+
 import ChangeRemoveMember from "../ChangeRemoveMember";
 
 const ButtonStyle = styled("div")(({ theme }) => ({
@@ -23,33 +26,25 @@ const ButtonStyle = styled("div")(({ theme }) => ({
   borderRadius: "5px",
 }));
 
-const ButtonAddTask = styled("div")(({ theme }) => ({
-  cursor: "pointer",
-  maxWidth: "20%",
-  marginLeft: "40%",
+const Item = styled(Paper)(({ theme }) => ({
+  color: "#693ca9",
   padding: "2px",
-  fontSize: "1.2rem",
-  transition: "transform 0.3s ease-in-out",
-  "&:hover": {
-    transform: "scale(1.05)",
-  },
-  backgroundColor: "#1f882c",
-  color: "white",
-  borderRadius: "5px",
+  marginTop: "10px",
 }));
 
 function AddTask({
   memberId,
-  pointStart,
+  // stars,
+  fetchFamilyLastname,
   setPoints,
   familyMembers,
   setFamilyMembers,
 }) {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = React.useState([]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     fetchTasks();
-  }, [memberId]); // Fetch tasks when the memberId changes
+  }, [memberId]);
 
   const fetchTasks = async () => {
     try {
@@ -58,11 +53,9 @@ function AddTask({
         throw new Error("Failed to fetch tasks");
       }
       const tasksData = await response.json();
-      // Filter tasks to include only those belonging to the current member
       const memberTasks = tasksData.filter(
         (task) => task.memberId === memberId
       );
-      console.log("memerTasks", memberTasks);
       setTasks(memberTasks);
     } catch (error) {
       console.error("Error fetching tasks:", error);
@@ -75,9 +68,9 @@ function AddTask({
         title: "Choose points",
         input: "select",
         inputOptions: {
-          10: "easy",
-          20: "medium",
-          30: "hard",
+          10: "10 points - EASY",
+          20: "20 points - MEDIUM",
+          30: "30 points - HARD",
         },
         inputPlaceholder: "Select a points",
         showCancelButton: true,
@@ -132,17 +125,49 @@ function AddTask({
     }
   };
 
+  // const handleTaskDone = async (index, taskId, points) => {
+  //   try {
+  //     await fetch(`http://localhost:4000/api/tasks/${taskId}`, {
+  //       method: "DELETE",
+  //     });
+  //     const updatedTasks = tasks.filter((task, i) => i !== index);
+  //     setTasks(updatedTasks);
+  //     setPoints(stars + Number(points));
+  //   } catch (error) {
+  //     console.error("Error marking task as done:", error);
+  //     Swal.fire("Error", "Failed to mark task as done", "error");
+  //   }
+  // };
+
   const handleTaskDone = async (index, taskId, points) => {
     try {
-      // Remove the task from the database
+      const response = await fetch(
+        `http://localhost:4000/api/families/${memberId}`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch member's stars");
+      }
+      const memberData = await response.json();
+      const currentStars = memberData.stars;
+
       await fetch(`http://localhost:4000/api/tasks/${taskId}`, {
         method: "DELETE",
       });
 
-      // Remove the task from the local state
+      const updatedStars = currentStars + Number(points);
+
+      await fetch(`http://localhost:4000/api/families/${memberId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ stars: updatedStars }),
+      });
+
       const updatedTasks = tasks.filter((task, i) => i !== index);
       setTasks(updatedTasks);
-      setPoints(pointStart + Number(points));
+      setPoints(updatedStars);
+      fetchFamilyLastname();
     } catch (error) {
       console.error("Error marking task as done:", error);
       Swal.fire("Error", "Failed to mark task as done", "error");
@@ -159,44 +184,38 @@ function AddTask({
         memberId={memberId}
       />{" "}
       <Box sx={{ width: "100%" }}>
-        {/* <ButtonAddTask onClick={() => handleAddTask()}>Add</ButtonAddTask> */}
-        {/* Displaying tasks */}
         {tasks.map((task, index) => (
-          <Grid
-            container
-            rowSpacing={1}
-            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-            key={index}
-          >
-            <Grid item xs={12}>
-              <hr />
-              <h5
-                style={{
-                  wordWrap: "break-word",
-                  marginBottom: "-20px",
-                  padding: "5px",
-                }}
-              >
-                {index + 1}. {task.title}
-              </h5>
-            </Grid>
-            {/* <Grid
+          <Item key={index}>
+            <Grid
               container
               rowSpacing={1}
               columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-            > */}
-            <Grid item xs={6}>
-              <h6>{task.points} ★</h6>
+              key={index}
+            >
+              <Grid item xs={12}>
+                <h5
+                  style={{
+                    wordWrap: "break-word",
+                    marginBottom: "-20px",
+                    padding: "5px",
+                  }}
+                >
+                  {index + 1}. {task.title}
+                </h5>
+              </Grid>
+
+              <Grid item xs={6}>
+                <h6>{task.points} ★</h6>
+              </Grid>
+              <Grid item xs={6} sx={{ marginTop: "50px" }}>
+                <ButtonStyle
+                  onClick={() => handleTaskDone(index, task._id, task.points)}
+                >
+                  Done
+                </ButtonStyle>
+              </Grid>
             </Grid>
-            <Grid item xs={6} sx={{ marginTop: "50px" }}>
-              <ButtonStyle
-                onClick={() => handleTaskDone(index, task._id, task.points)}
-              >
-                Done
-              </ButtonStyle>
-            </Grid>
-          </Grid>
-          // </Grid>
+          </Item>
         ))}
       </Box>
     </>

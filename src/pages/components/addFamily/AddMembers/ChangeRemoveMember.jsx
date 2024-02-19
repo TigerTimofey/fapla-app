@@ -1,15 +1,15 @@
 import * as React from "react";
-import { styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Swal from "sweetalert2";
 
+import Box from "@mui/material/Box";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
-
 import PlaylistAddCircleIcon from "@mui/icons-material/PlaylistAddCircle";
 import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { styled } from "@mui/material/styles";
+
+import Swal from "sweetalert2";
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -18,15 +18,11 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 }));
 
 export default function ChangeRemoveMember({
-  familyMembers,
   setFamilyMembers,
   handleAddTask,
-  // handleChangeMember,
-  // handleRemoveMember,
   memberId,
 }) {
   const handleChangeMember = async (id) => {
-    console.log("memeber id in addFa ", id);
     try {
       const { value: newName } = await Swal.fire({
         title: "Enter New Name",
@@ -69,7 +65,6 @@ export default function ChangeRemoveMember({
   };
 
   const handleRemoveMember = async (id) => {
-    console.log("id remove", id);
     try {
       const response = await fetch(`http://localhost:4000/api/families/${id}`, {
         method: "DELETE",
@@ -82,7 +77,6 @@ export default function ChangeRemoveMember({
         throw new Error("Failed to delete");
       }
 
-      // Remove the member from the state
       setFamilyMembers((prevMembers) =>
         prevMembers.filter((member) => member.id !== id)
       );
@@ -91,13 +85,11 @@ export default function ChangeRemoveMember({
       Swal.fire("Error", "Failed to delete family member", "error");
     }
   };
+
   return (
     <Box sx={{ transform: "translateZ(0px)", flexGrow: 1 }}>
       <Box sx={{ position: "relative", height: 0 }}>
-        {/* {familyMembers &&
-          familyMembers.map((member) => ( */}
         <StyledSpeedDial
-          // key={member.id}
           ariaLabel="SpeedDial playground example"
           hidden={false}
           icon={<SpeedDialIcon />}
@@ -166,12 +158,10 @@ export default function ChangeRemoveMember({
               },
             }}
             onClick={() => {
-              // Handle Add Task action
               handleAddTask();
             }}
           />
         </StyledSpeedDial>
-        {/* ))} */}
       </Box>
     </Box>
   );

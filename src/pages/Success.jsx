@@ -17,10 +17,10 @@ import AddFamilyMember from "./components/addFamily/addMembers/AddFamilyMember";
 
 import Swal from "sweetalert2";
 
-const supabase = createClient(
-  "https://ejptakqzjdjnyservufe.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqcHRha3F6amRqbnlzZXJ2dWZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDY0Njk5MDksImV4cCI6MjAyMjA0NTkwOX0.8THRHyVvP1aDBqa_l5et6cHoPz9VTRK5ZtN1uu7fhds"
-);
+const supaWeb = process.env.REACT_APP_SUPA_WEB;
+const supaWebKey = process.env.REACT_APP_SUPA_WEB_KEY;
+
+const supabase = createClient(supaWeb, supaWebKey);
 
 const StyledHeader = styled("header")(({ theme }) => ({
   position: "fixed",
@@ -48,14 +48,13 @@ function Success() {
   const [familyLastname, setFamilyLastname] = React.useState({});
   const [idRemoveLastname, setIdRemoveLastname] = React.useState("");
   const [familyMembers, setFamilyMembers] = React.useState([]);
-  const [tasks, setTasks] = React.useState({});
 
   const navigate = useNavigate();
 
   React.useEffect(() => {
     async function getUserData() {
       await supabase.auth.getUser().then((value) => {
-        if (user.email === "timofey.babisashvili@gmail.com") {
+        if (user?.email === "timofey.babisashvili@gmail.com") {
           setIsUserAdmin(true);
         }
         if (value.data?.user) {
@@ -71,7 +70,6 @@ function Success() {
     console.log("error", error);
     navigate("/");
   }
-  //Lastname
   const fetchFamilyLastname = async () => {
     const response = await fetch("/api/lastnames");
     const data = await response.json();
@@ -91,7 +89,7 @@ function Success() {
   React.useEffect(() => {
     fetchFamilyLastname();
   }, []);
-  //change Family
+
   const handleChangeFamily = async (id) => {
     try {
       const { value: newFamname } = await Swal.fire({

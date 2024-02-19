@@ -1,6 +1,8 @@
 import React from "react";
+
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
+
 import Swal from "sweetalert2";
 
 const ButtonStyle = styled("div")(({ theme }) => ({
@@ -11,12 +13,7 @@ const ButtonStyle = styled("div")(({ theme }) => ({
   },
 }));
 
-function AddNewLastname({
-  setFamilyLastname,
-  familyLastname,
-  idRemoveLastname,
-  setIdRemoveLastname,
-}) {
+function AddNewLastname({ setFamilyLastname, setIdRemoveLastname }) {
   const handleCreateFamily = async () => {
     try {
       const { value: famname } = await Swal.fire({

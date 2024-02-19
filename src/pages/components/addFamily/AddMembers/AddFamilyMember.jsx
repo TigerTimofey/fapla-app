@@ -7,7 +7,6 @@ import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
 
 import Swal from "sweetalert2";
-
 import AddTask from "./addTasks/AddTask";
 
 const ButtonStyle = styled("div")(({ theme }) => ({
@@ -156,6 +155,7 @@ function AddFamilyMember() {
                   </h6>
                 </div>
               </Item>
+
               <AddTask
                 memberId={member.id}
                 // stars={points}

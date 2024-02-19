@@ -7,7 +7,7 @@ import { styled } from "@mui/material/styles";
 
 import Swal from "sweetalert2";
 
-import ChangeRemoveMember from "../ChangeRemoveMember";
+import ChangeRemoveMember from "../../addMembers/ChangeRemoveMember";
 
 const ButtonStyle = styled("div")(({ theme }) => ({
   cursor: "pointer",

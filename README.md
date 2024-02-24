@@ -1,70 +1,44 @@
-# Getting Started with Create React App
+# Fapla App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## `About project`
 
-## Available Scripts
+This application is a To-Do list for families, where you can create your personal account via Google or your email.
 
-In the project directory, you can run:
+## `Functionality`
 
-### `npm start`
+- Registration via Google is done using Google OAuth 2.0, and registration via email is done through Supabase.
+- Upon accessing your personal account page, you can create a family and add family members, specifying their roles in the family.
+- With family members added, you can create tasks. Each task has its own level of difficulty and corresponding points. When a task is completed, the family member earns points (stars).
+- All data is stored in a MongoDB database and will always be accessible.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## `Video about the application (English):`
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+https://youtu.be/6wBAYNnWfVk
 
-### `npm test`
+## `IMAGES`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+<b>WEB</b>\
+<img src="https://github.com/TigerTimofey/fapla-app/assets/119110538/f431e78a-a649-476e-8f7a-7a09425945a3" alt="1"  height="240">\
+<b>TABLET</b>\
+<img src="https://github.com/TigerTimofey/fapla-app/assets/119110538/fdebac93-7e6d-4725-83fb-98b27ca30c2a" alt="2" height="240">\
+<b>PHONE</b>\
+<img src="https://github.com/TigerTimofey/fapla-app/assets/119110538/8764de3e-4329-4303-8926-35db03e1da8c" alt="3"  height="240">\
 
-### `npm run build`
+## `Versions and used packages`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+    "@mui/material": "^5.15.6",
+    "@mui/styled-engine-sc": "^6.0.0-alpha.13",
+    "@supabase/auth-ui-react": "^0.4.7",
+    "@supabase/auth-ui-shared": "^0.1.8",
+    "@supabase/supabase-js": "^2.39.3",
+    "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.21.3",
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## `Dependencies`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.4",
+    "express": "^4.18.2",
+    "mongoose": "^8.1.1"

@@ -192,14 +192,14 @@ function Success() {
                   >
                     {" "}
                     <SpeedDialAction
-                      icon={<DeleteForeverIcon />}
-                      tooltipTitle="Remove Member"
-                      onClick={handleDeleteFamily}
-                    />
-                    <SpeedDialAction
                       icon={<ChangeCircleIcon />}
                       tooltipTitle="Change Name"
                       onClick={handleChangeFamily}
+                    />{" "}
+                    <SpeedDialAction
+                      icon={<DeleteForeverIcon />}
+                      tooltipTitle="Remove Member"
+                      onClick={handleDeleteFamily}
                     />
                   </StyledSpeedDial>
                   <div className="SignOut-button">
@@ -229,6 +229,14 @@ function Success() {
                   setIdRemoveLastname={setIdRemoveLastname}
                 />
                 <div className="SignOut-button">
+                  <Paper elevation={8}>
+                    <UserStatus
+                      user={user}
+                      openSnackBar={openSnackBar}
+                      setOpenSnackBar={setOpenSnackBar}
+                      isUserAdmin={isUserAdmin}
+                    />
+                  </Paper>
                   <SignOut signOutUser={signOutUser} />
                 </div>
               </>

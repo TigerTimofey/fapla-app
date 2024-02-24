@@ -26,9 +26,15 @@ export default function LoginApp() {
   return (
     <div className="App ">
       <header className="App-header BackSpecial">
-        <div>
-          <h1>FAPLA</h1> App for family plans
-        </div>
+        <h1
+          style={{
+            backgroundColor: "#3fcf8e",
+            padding: "15px",
+            borderRadius: "20px",
+          }}
+        >
+          FAPLA
+        </h1>
 
         <Paper elevation={5} sx={{ padding: 5, backgroundColor: "#ffffff" }}>
           <Auth

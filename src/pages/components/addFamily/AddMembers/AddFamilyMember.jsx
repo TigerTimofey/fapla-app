@@ -27,6 +27,7 @@ function AddFamilyMember() {
   const [familyMembers, setFamilyMembers] = React.useState([]);
   const [idRemoveLastname, setIdRemoveLastname] = React.useState(null);
   const [points, setPoints] = React.useState(0);
+  const [animatePoints, setAnimatePoints] = React.useState("");
 
   const handleCreateMember = async (name, role, memberStars) => {
     try {
@@ -42,7 +43,6 @@ function AddFamilyMember() {
         throw new Error("Failed to fetch");
       }
       const data = await response.json();
-      console.log("data", data);
       const stars = Number(data.stars);
       setPoints((prevPoints) => Number(prevPoints) + stars);
 
@@ -151,17 +151,21 @@ function AddFamilyMember() {
                 >
                   <h6 style={{ marginRight: "10px" }}>{member.role}</h6>
                   <h2>{member.name}</h2>
-
-                  <h6 style={{ marginLeft: "10px", color: "#D4AF37" }}>
+                  <h6
+                    style={{ marginLeft: "10px", color: "#D4AF37" }}
+                    className={`animate__animated ${animatePoints} animate__delay-0.5s`}
+                  >
                     {" "}
-                    {member.stars} ★
+                    {member.stars}
                   </h6>
+                  <h6 style={{ marginLeft: "2px", color: "#D4AF37" }}> ★</h6>
                 </div>
               </Item>
 
               <AddTask
                 memberId={member.id}
                 // stars={points}
+                setAnimatePoints={setAnimatePoints}
                 setPoints={setPoints}
                 familyMembers={familyMembers}
                 setFamilyMembers={setFamilyMembers}

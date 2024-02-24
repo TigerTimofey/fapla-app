@@ -72,8 +72,6 @@ LogoFont {
   position: fixed;
   top: 0px;
   left: 15px;
-  animation: backInDown;
-  animation-duration: 1.2s;
 }
 
 .Info-user {

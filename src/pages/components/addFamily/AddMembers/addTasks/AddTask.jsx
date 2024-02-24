@@ -37,6 +37,7 @@ const Item = styled(Paper)(({ theme }) => ({
 function AddTask({
   memberId,
   // stars,
+  setAnimatePoints,
   fetchFamilyLastname,
   setPoints,
   familyMembers,
@@ -107,7 +108,7 @@ function AddTask({
               memberId: memberId,
               points: points,
               title: title,
-              done: false, // Set done field to false
+              done: false,
             }),
           });
 
@@ -115,12 +116,12 @@ function AddTask({
             throw new Error("Failed to add task");
           }
 
-          // Add the task locally for immediate display
           setTasks([
             ...tasks,
             { memberId: memberId, points: points, title: title, done: false },
           ]);
         }
+        fetchTasks();
       }
     } catch (error) {
       console.error("Error adding task:", error);
@@ -166,17 +167,20 @@ function AddTask({
         },
         body: JSON.stringify({ stars: updatedStars }),
       });
+      fetchFamilyLastname();
       setAnimationTask("animate__flipOutX");
+      setAnimatePoints("animate__heartBeat");
       setTimeout(() => {
         const updatedTasks = tasks.filter((task, i) => i !== index);
         setTasks(updatedTasks);
         setPoints(updatedStars);
-        fetchFamilyLastname();
+        setAnimatePoints("");
         setAnimationTask("animate__flipInX");
       }, 700);
     } catch (error) {
       console.error("Error marking task as done:", error);
       Swal.fire("Error", "Failed to mark task as done", "error");
+      setAnimationTask("animate__headShake");
     }
   };
 

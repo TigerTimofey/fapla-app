@@ -13,7 +13,7 @@ This application is a To-Do list for families, where you can create your persona
 
 ## `Video about the application (English):`
 
-https://youtu.be/6wBAYNnWfVk
+https://youtu.be/E7aro8HNCWc
 
 ## `IMAGES`
 
